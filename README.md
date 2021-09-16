@@ -2,12 +2,16 @@
 
 1. Added OTP Login and Signup using Firebase :- When someone opens app for the first they have to signup using OTP Verification, once signed up they no longer see the login screen until and unless they logout.
 
+Login               |  OTP Verification                                           
+:-------------------------:|:-------------------------:
+![](emptyCart.png)|![](Screenshot_20210916-213902.png)|
+
 
 2. Added "Add to Cart Functionality" :- Now the User Can dynamically add and remove items to the cart selected from the restraunt detail page. And they can update the cart as well the total price of the bill will update automatically if you increase any items number. 
 
 EmptyCart               |  Add Items from RestrauntDetails                       | Items Added                          
 :-------------------------:|:-------------------------:|:-------------------------:
-![](emptyCart.png)|![](screenshots/swiggy2.jpg)|![](screenshots/swiggy3.jpg)|
+![](emptyCart.png)|![](RestrauntDetails.png)|![](cartItems.png)|
 
 # SwiggyUI
 
