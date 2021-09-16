@@ -1,3 +1,11 @@
+# Changes Made By Harsh Jain
+
+1. Added OTP Login and Signup using Firebase :- When someone opens app for the first they have to signup using OTP Verification, once signed up they no longer see the login screen until and unless they logout.
+
+
+2. Added "Add to Cart Functionality" :- Now the User Can dynamically add and remove items to the cart selected from the restraunt detail page.
+
+
 # SwiggyUI
 
 SwiggyUI App is a UI clone of a famous food ordering app called [Swiggy](https://play.google.com/store/apps/details?id=in.swiggy.android) built using Flutter. Show some ❤️ and star ⭐ the repo if you liked it, it makes me to share more open source flutter projects.
