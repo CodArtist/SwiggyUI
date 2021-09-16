@@ -4,7 +4,7 @@
 
 Login               |  OTP Verification                                           
 :-------------------------:|:-------------------------:
-![](Screenshot_20210916-213902.png)|![]()|
+![](Screenshot_20210916-213902.png)|![](Screenshot_20210916-213955.png)|
 
 
 2. Added "Add to Cart Functionality" :- Now the User Can dynamically add and remove items to the cart selected from the restraunt detail page. And they can update the cart as well the total price of the bill will update automatically if you increase any items number. 
