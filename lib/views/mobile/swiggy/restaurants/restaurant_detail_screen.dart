@@ -3,12 +3,16 @@ import 'package:swiggy_ui/models/restaurant_detail.dart';
 import 'package:swiggy_ui/utils/ui_helper.dart';
 import 'package:swiggy_ui/widgets/custom_divider_view.dart';
 import 'package:swiggy_ui/widgets/veg_badge_view.dart';
+import 'package:swiggy_ui/models/cart_items.dart';
+import 'package:get/get.dart';
+import 'package:swiggy_ui/models/RestrauntMenu.dart';
 
 class RestaurantDetailScreen extends StatelessWidget {
   const RestaurantDetailScreen({Key? key}) : super(key: key);
-
+   
   @override
   Widget build(BuildContext context) {
+   Get.put(cartItems());
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -183,11 +187,17 @@ class _OrderNowView extends StatelessWidget {
 }
 
 class _RecommendedFoodView extends StatelessWidget {
-  final foods = RestaurantDetail.getBreakfast();
+  // final foods = RestaurantDetail.getBreakfast();
+   final foods=Get.put(RestrauntMenu());
+  cartItems cart_items = Get.find();
+ 
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return 
+          //     GetBuilder<cartItems>(
+          // builder:(controller){
+       Container(
       padding: const EdgeInsets.all(10.0),
       child: GridView.count(
         shrinkWrap: true,
@@ -195,15 +205,18 @@ class _RecommendedFoodView extends StatelessWidget {
         childAspectRatio: 0.8,
         physics: const NeverScrollableScrollPhysics(),
         children: List.generate(
-          foods.length,
-          (index) => Container(
+          foods.RestrauntItems.length,
+          (index) => 
+
+
+          Container(
             margin: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
                   child: Image.asset(
-                    foods[index].image,
+                    foods.RestrauntItems[index]["image"],
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -228,7 +241,7 @@ class _RecommendedFoodView extends StatelessWidget {
                           UIHelper.horizontalSpaceExtraSmall(),
                           Flexible(
                             child: Text(
-                              foods[index].title,
+                              foods.RestrauntItems[index]["title"],
                               maxLines: 1,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
@@ -240,12 +253,18 @@ class _RecommendedFoodView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(foods[index].price,
+                          Text(foods.RestrauntItems[index]["price"],
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
                                   .copyWith(fontSize: 14.0)),
-                          const AddBtnView()
+                           GestureDetector(onTap:(){
+                             
+                             if(!foods.RestrauntItems[index]["AddedToCart"])
+                             {foods.AddtoCartStatus(index);
+                             cart_items.addItem(foods.RestrauntItems[index]);
+                             }
+                           }, child:AddBtnView(index))
                         ],
                       )
                     ],
@@ -254,16 +273,18 @@ class _RecommendedFoodView extends StatelessWidget {
               ],
             ),
           ),
+          
         ),
-      ),
-    );
+        ),
+      );
+          
+    
   }
 }
 
 class AddBtnView extends StatelessWidget {
-  const AddBtnView({
-    Key? key,
-  }) : super(key: key);
+  var index;
+   AddBtnView(this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -272,14 +293,20 @@ class AddBtnView extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
       ),
-      child: Text(
-        'ADD',
+      child: 
+      GetBuilder<RestrauntMenu>(
+        builder:(controller){
+      return Text(
+        controller.RestrauntItems[index]["AddedToCart"]?"Added":"Add",
         style: Theme.of(context)
             .textTheme
             .subtitle2!
             .copyWith(color: Colors.green),
-      ),
+      );
+        }
+      )
     );
+  
   }
 }
 
@@ -354,7 +381,7 @@ class _FoodListView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const AddBtnView()
+                    //  AddBtnView(index)
                     ],
                   ),
                 ],

@@ -3,15 +3,23 @@ import 'package:swiggy_ui/utils/app_colors.dart';
 import 'package:swiggy_ui/utils/ui_helper.dart';
 import 'package:swiggy_ui/widgets/custom_divider_view.dart';
 import 'package:swiggy_ui/widgets/veg_badge_view.dart';
+import 'package:get/get.dart';
+import 'package:swiggy_ui/models/cart_items.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.put(cartItems());
+    cartItems cart_items =Get.find();
+
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child:
+        cart_items.items.length==0?
+        Center(child: Text("Your Cart is Empty Please Add Items"),):
+         SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(top: 15.0),
             child: Column(
@@ -29,7 +37,9 @@ class CartScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+          
+        ),
+    
     );
   }
 }
@@ -44,14 +54,55 @@ class _OrderViewState extends State<_OrderView> {
 
   @override
   Widget build(BuildContext context) {
+    return
+    GetBuilder<cartItems>(builder:(controller){ 
     return Container(
+      height:500,
+       
+      child:ListView.builder(
+      itemCount:controller.items.length,
+      itemBuilder:(context,index){
+    
+    return cartitem(controller.items[index],index);
+    }
+      ),
+    );
+    }
+    );
+    
+  }
+}
+
+class cartitem extends StatefulWidget {
+  var item;
+  var price;
+  // var currentPrice;
+  var itemIndex;
+   cartitem(this.item,this.itemIndex){
+   print("laskskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+   this.price=int.parse(item["price"].substring(2));
+  //  this.currentPrice=price;
+  }
+
+  @override
+  _cartitemState createState() => _cartitemState();
+}
+
+class _cartitemState extends State<cartitem> {
+  var cartCount=1;
+  cartItems cart_items=Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+    Container(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Image.asset(
-                'assets/images/food1.jpg',
+                widget.item["image"],
                 height: 60.0,
                 width: 60.0,
               ),
@@ -74,7 +125,7 @@ class _OrderViewState extends State<_OrderView> {
               UIHelper.horizontalSpaceSmall(),
               Flexible(
                 child: Text(
-                  'Aloo Paratha with Curd and Pickle',
+                  widget.item["title"],
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
@@ -97,7 +148,12 @@ class _OrderViewState extends State<_OrderView> {
                         if (cartCount > 0) {
                           setState(() {
                             cartCount -= 1;
+                            cart_items.decrease_total_price(widget.price);
+                            if(cartCount==0){
+                              cart_items.deleteItem(widget.itemIndex);
+                            }
                           });
+                          
                         }
                       },
                     ),
@@ -113,6 +169,8 @@ class _OrderViewState extends State<_OrderView> {
                       onTap: () {
                         setState(() {
                           cartCount += 1;
+                          cart_items.increase_total_price(widget.price);
+
                         });
                       },
                     )
@@ -121,7 +179,7 @@ class _OrderViewState extends State<_OrderView> {
               ),
               UIHelper.horizontalSpaceSmall(),
               Text(
-                'Rs125',
+                'RS' + (widget.price*cartCount).toString(),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
@@ -146,8 +204,11 @@ class _OrderViewState extends State<_OrderView> {
         ],
       ),
     );
+     
   }
 }
+
+
 
 class _CouponView extends StatelessWidget {
   @override
@@ -179,7 +240,9 @@ class _BillDetailView extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
+      child:  GetBuilder<cartItems>(
+            builder: (controller){
+              return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
@@ -188,13 +251,17 @@ class _BillDetailView extends StatelessWidget {
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 17.0),
           ),
           UIHelper.verticalSpaceSmall(),
-          Row(
+        
+           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+
               Text('Item total', style: textStyle),
-              Text('Rs 129.00', style: textStyle),
+
+              Text('Rs '+controller.TotalPrice.toString(), style: textStyle),
             ],
           ),
+        
           UIHelper.verticalSpaceMedium(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,12 +315,14 @@ class _BillDetailView extends StatelessWidget {
               children: <Widget>[
                 Text('To Pay', style: Theme.of(context).textTheme.subtitle2),
                 const Spacer(),
-                Text('Rs 210.00', style: textStyle),
+                Text('Rs ' + (54+26.67+controller.TotalPrice).toString(), style: textStyle),
               ],
             ),
           ),
         ],
-      ),
+      );
+            }
+      )
     );
   }
 
@@ -377,12 +446,15 @@ class _AddressPaymentView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      'Rs210.00',
+                    GetBuilder<cartItems>(builder:(controller){
+                      return Text(
+                      'Rs '+(26.67+54+controller.TotalPrice).toString(),
                       style: Theme.of(context)
                           .textTheme
                           .subtitle2!
                           .copyWith(fontSize: 16.0),
+                    );
+                    }
                     ),
                     UIHelper.verticalSpaceExtraSmall(),
                     Text(

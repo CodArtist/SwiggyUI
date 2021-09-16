@@ -28,6 +28,10 @@ dependencies:
   card_swiper: ^1.0.4
   google_fonts: ^2.1.0
   shimmer: ^2.0.0
+  get: any
+  firebase_core: any
+  firebase_auth: any
+  numeric_keyboard: ^1.0.0
 
 dev_dependencies:
   flutter_test:

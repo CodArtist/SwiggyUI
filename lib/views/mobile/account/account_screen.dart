@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:swiggy_ui/utils/app_colors.dart';
 import 'package:swiggy_ui/utils/ui_helper.dart';
+import 'package:swiggy_ui/views/mobile/Login.dart';
 import 'package:swiggy_ui/widgets/custom_divider_view.dart';
 import 'package:swiggy_ui/widgets/dotted_seperator_view.dart';
 
@@ -196,7 +198,7 @@ class _PastOrderListView extends StatelessWidget {
     'Chicken Noodles x 1',
     'Milk Tea x 1',
   ];
-
+final _auth =FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -224,9 +226,15 @@ class _PastOrderListView extends StatelessWidget {
         ),
         UIHelper.verticalSpaceSmall(),
         const CustomDividerView(),
-        Row(
+      Row(
           children: <Widget>[
-            Container(
+             GestureDetector(
+          onTap: ()async{
+            print("hyyyyyyyyyyyyy");
+           Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Login()));
+           await _auth.signOut();
+          },
+          child: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 10.0),
               height: 50.0,
@@ -238,11 +246,18 @@ class _PastOrderListView extends StatelessWidget {
                     .copyWith(fontSize: 16.0),
               ),
             ),
+             ),
             const Spacer(),
-            const Icon(Icons.power_settings_new),
+             GestureDetector(
+          onTap: ()async{
+           Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Login()));
+           await _auth.signOut();
+          },
+          child: const Icon(Icons.power_settings_new)),
             UIHelper.horizontalSpaceSmall(),
           ],
         ),
+       
         Container(
           alignment: Alignment.topCenter,
           padding: const EdgeInsets.only(top: 20.0),
